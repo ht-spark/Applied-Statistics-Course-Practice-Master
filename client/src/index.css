@@ -1,0 +1,122 @@
+@import url("https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@import '@lark-apaas/client-toolkit/lib/index.css';
+@import "tw-animate-css";
+@import "./tailwind-theme.css";
+@import "./typography.css";
+
+body {
+  min-height: 100vh;
+  background: var(--background);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(166, 58, 46, 0.15);
+  color: var(--foreground);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
+
+.font-display {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.font-heading {
+  font-family: var(--font-serif);
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: fade-in-up 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+.question-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+
+.question-badge.correct {
+  background: var(--status-correct);
+  color: #fff;
+}
+
+.question-badge.wrong {
+  background: var(--status-wrong);
+  color: #fff;
+}
+
+.prose-katex .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5em 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.section-title__num {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--primary);
+  font-style: italic;
+  line-height: 1;
+}
+
+.section-title__text {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--foreground);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+*:focus-visible {
+  outline: 1px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@config "../../tailwind.config.ts";
