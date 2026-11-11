@@ -10,6 +10,12 @@ build/
 
 # Environment files
 .env.local
+.env.*.local
+.dev.vars
+.dev.vars.*
+.wrangler/
+.neon
+worker-configuration.d.ts
 
 # Logs
 npm-debug.log*
@@ -63,3 +69,4 @@ pnpm-lock.yaml
 # Agent files
 .agent/
 .npm_cache
+.neon

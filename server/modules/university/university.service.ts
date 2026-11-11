@@ -1,5 +1,5 @@
 import { Injectable, Inject, Logger, NotFoundException } from '@nestjs/common';
-import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@lark-apaas/fullstack-nestjs-core';
+import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@server/database/context';
 import { eq, and, ilike, asc, count, inArray } from 'drizzle-orm';
 import type { University, ExamPaperSummary } from '@shared/api.interface';
 import { universities, examPapers, questions, questionOptions } from '@server/database/schema';

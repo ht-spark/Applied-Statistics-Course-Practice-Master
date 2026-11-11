@@ -6,7 +6,7 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@lark-apaas/fullstack-nestjs-core';
+import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@server/database/context';
 import { and, count, desc, eq } from 'drizzle-orm';
 import {
   universities,

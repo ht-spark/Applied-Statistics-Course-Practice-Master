@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@lark-apaas/fullstack-nestjs-core';
+import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@server/database/context';
 import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcryptjs';
 import * as crypto from 'node:crypto';
@@ -13,7 +13,19 @@ import * as crypto from 'node:crypto';
 import { appUsers } from '@server/database/schema';
 import { RegisterDto, LoginDto } from './auth.dto';
 
-export const JWT_SECRET = 'kaoyan-app-secret-key';
+let configuredJwtSecret: string | undefined;
+
+export function configureJwtSecret(secret: string) {
+  configuredJwtSecret = secret;
+}
+
+export function getJwtSecret(): string {
+  if (configuredJwtSecret) return configuredJwtSecret;
+  const secret = process.env.JWT_SECRET;
+  if (secret) return secret;
+  if (process.env.NODE_ENV === 'production') throw new Error('JWT_SECRET is required');
+  return 'kaoyan-local-development-only';
+}
 export const COOKIE_NAME = 'kaoyan_token';
 const TOKEN_EXPIRES_IN = 7 * 24 * 60 * 60; // 7 days in seconds
 
@@ -148,7 +160,7 @@ export class AuthService {
     const signingInput = `${encodedHeader}.${encodedPayload}`;
 
     const signature = base64UrlEncode(
-      crypto.createHmac('sha256', JWT_SECRET).update(signingInput).digest(),
+      crypto.createHmac('sha256', getJwtSecret()).update(signingInput).digest(),
     );
 
     return `${signingInput}.${signature}`;
@@ -168,10 +180,10 @@ export class AuthService {
     const signingInput = `${headerB64}.${payloadB64}`;
 
     const expectedSignature = base64UrlEncode(
-      crypto.createHmac('sha256', JWT_SECRET).update(signingInput).digest(),
+      crypto.createHmac('sha256', getJwtSecret()).update(signingInput).digest(),
     );
 
-    if (
+    if (signatureB64.length !== expectedSignature.length ||
       !crypto.timingSafeEqual(
         Buffer.from(signatureB64),
         Buffer.from(expectedSignature),

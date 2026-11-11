@@ -6,12 +6,12 @@ import {
   ForbiddenException,
   Inject,
 } from '@nestjs/common';
-import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@lark-apaas/fullstack-nestjs-core';
-import { createHmac } from 'crypto';
+import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@server/database/context';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import { appUsers } from '@server/database/schema';
 
-const JWT_SECRET = 'kaoyan-app-secret-key';
+import { getJwtSecret } from '../auth/auth.service';
 const COOKIE_NAME = 'kaoyan_token';
 
 interface JwtPayload {
@@ -46,9 +46,10 @@ function verifyToken(token: string): JwtPayload | null {
 
     const [headerB64, payloadB64, signatureB64] = parts;
     const data = `${headerB64}.${payloadB64}`;
-    const expectedSignature = hmacSha256(data, JWT_SECRET);
+    const expectedSignature = hmacSha256(data, getJwtSecret());
 
-    if (signatureB64 !== expectedSignature) return null;
+    if (signatureB64.length !== expectedSignature.length ||
+        !timingSafeEqual(Buffer.from(signatureB64), Buffer.from(expectedSignature))) return null;
 
     const payload = JSON.parse(base64UrlDecode(payloadB64)) as JwtPayload;
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) return null;

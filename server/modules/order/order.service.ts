@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@lark-apaas/fullstack-nestjs-core';
+import { DRIZZLE_DATABASE, type PostgresJsDatabase } from '@server/database/context';
 import { and, asc, count, desc, eq, gt, or } from 'drizzle-orm';
 import type { Order, PageResult, Product, UserEntitlement } from '@shared/api.interface';
 import { ORDER_STATUSES, PAYMENT_METHODS, PRODUCT_TYPES } from '@shared/api.interface';
